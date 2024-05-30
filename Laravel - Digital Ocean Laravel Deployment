@@ -1,0 +1,52 @@
+# Digital Ocenan - Laravel Image
+
+First we clone the project we want on `/etc/www/`
+
+```
+https://<TOKEN>@github.com/<USERNAME>/<REPO>.git
+```
+
+We go on that repo and we sync file
+
+```bash
+rsync -avzh ./ /var/www/laravel
+```
+
+after that we can delete the repo we just create
+
+Whe check the extension they we need 
+
+```bash
+composer check-platform-reqs
+```
+
+in my case i need to insall all of this
+
+```bash
+sudo apt-get update
+sudo apt-get install -y php8.2-cli php8.2-fpm php8.2-mysql php8.2-curl php8.2-xml php8.2-mbstring php8.2-zip php8.2-bcmath php8.2-intl php8.2-soap php8.2-xmlrpc php8.2-gd php8.2-common
+```
+
+Lets Restart the Server
+
+```bash
+sudo systemctl restart nginx  
+```
+
+installing the composer file
+
+```bash
+composer install --no-ansi --no-dev --no-interaction --no-plugins --no-progress --no-scripts --optimize-autoloader
+```
+
+Also WE need to give access to log file manaly if we we sync file 
+```bash
+sudo chown -R www-data:www-data /var/www/laravel/storage
+sudo chmod -R 775 /var/www/laravel/storage
+sudo chmod -R 775 /var/www/laravel/bootstrap/cache
+```
+
+```bash
+sudo systemctl restart nginx  
+```
+
