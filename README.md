@@ -1,4 +1,8 @@
-### Install
+# Notes 
+
+[Content of this Blog ](https://github.com/AlpetGexha/Notes/tree/master/src/content/blog)
+
+## Install
 
 ```bash
 npm install
