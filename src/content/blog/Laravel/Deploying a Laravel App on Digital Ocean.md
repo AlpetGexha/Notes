@@ -132,5 +132,26 @@ php artisan optimize
 php artisan view:cache
 php artisan event:cache
 php artisan icons:cache
-
 ```
+
+
+### SSL Configurate
+
+we need to change the domain name on 
+
+```bash
+nano /etc/nginx/sites-enabled/laravel
+```
+
+and we run certbot
+
+```bash
+certbot
+```
+
+or
+
+```bash
+sudo certbot --nginx -d DOMAIN -d www.DOMAIN
+```
+
