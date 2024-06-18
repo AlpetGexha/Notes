@@ -127,6 +127,8 @@ chmod -R 775 /var/www/laravel/bootstrap/cache
 chown -R www-data:www-data /var/www/laravel/bootstrap/cache
 sudo systemctl restart nginx
 
+php artisan storage:link
+
 php artisan optimize:clear
 php artisan optimize
 php artisan view:cache
@@ -155,3 +157,75 @@ or
 sudo certbot --nginx -d DOMAIN -d www.DOMAIN
 ```
 
+### Queue Worker
+
+To have queue worker on our server we need a service which can allow to run queue:work all the time. So we need a supervisor
+
+**Supervisor** is a process monitor for the Linux Operating System, and it will automatically restart queue:work process if it fails
+
+To install Supervisor on Ubuntu, you may use the following command:
+
+```bash 
+sudo apt-get install supervisor
+```
+
+After installing Supervisor on our server we need to go to conf.d directory
+
+```bash
+cd /etc/supervisor/conf.d
+```
+
+Create ne file .conf 
+
+```bash
+touch queue-worker.conf 
+```
+
+and this is the script u need to put in the file
+
+```bash
+[program:queue-worker]
+
+process_name=%(program_name)s_%(process_num)02d
+
+command=php /var/www/laravel/artisan queue:work
+
+autostart=true
+
+autorestart=true
+
+user=root
+
+numprocs=4
+
+redirect_stderr=true
+
+stdout_logfile=/var/www/laravel/storage/logs/worker.log
+```
+
+Those are the basic configurations for the queue worker. You can change the number of processes, the user, and the path to the log file:
+
+- **process_name**: The name of the process. (This sets the naming pattern for the processes. %(program_name)s is a placeholder for the program name (queue-worker), and %(process_num)02d is a placeholder for the process number, formatted as a two-digit number (e.g., 00, 01, 02, etc.). So, the process names will be queue-worker_00, queue-worker_01, and so on.)
+
+- **command**: The command to run. (This is the command that will be executed to start the queue worker. In this case, it is php /var/www/laravel/artisan queue:work.)
+
+- **autostart**: This means the process will be automatically started when Supervisor starts.
+
+- **autorestart**: This means the process will be automatically restarted if it exits unexpectedly.
+
+- **user**: The user that the process will run as. (In this case, it is root.)
+
+- **numprocs**: This specifies the number of process instances to start. In this case, 4 instances of the queue worker will be started.
+
+- **redirect_stderr**: This means that the standard error stream will be redirected to the location specified by the stdout_logfile parameter.
+
+- **stdout_logfile**: The path to the log file for the process. (In this case, it is /var/www/laravel/storage/logs/worker.log.)
+
+
+Also dont forget to restart the supervisor if you have made any changes
+
+```bash
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl reload
+```
