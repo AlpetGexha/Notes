@@ -203,7 +203,7 @@ redirect_stderr=true
 stdout_logfile=/var/www/laravel/storage/logs/worker.log
 ```
 
-Those are the basic configurations for the queue worker. You can change the number of processes, the user, and the path to the log file:
+This Supervisor configuration sets up 4 instances of a Laravel queue worker, ensures they are automatically started and restarted if they fail, runs them as the root user, and logs their output to a specified log file.
 
 - **process_name**: The name of the process. (This sets the naming pattern for the processes. %(program_name)s is a placeholder for the program name (queue-worker), and %(process_num)02d is a placeholder for the process number, formatted as a two-digit number (e.g., 00, 01, 02, etc.). So, the process names will be queue-worker_00, queue-worker_01, and so on.)
 
