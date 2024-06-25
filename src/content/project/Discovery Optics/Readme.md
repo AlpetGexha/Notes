@@ -22,7 +22,7 @@ DiscoveryOptics, developed by Mtechstudio LLC, is a groundbreaking application t
 
 ![DiscoveryOptics](./Screnshoot/screencapture-discoveryoptics-mtechstudio-2024-06-23-21_40_32.png)
 
-![DiscoveryOptics](./Screnshoot/screencapture-discoveryoptics-mtechstudio-2024-06-23-21_40_49.png)
+<!-- ![DiscoveryOptics](./Screnshoot/screencapture-discoveryoptics-mtechstudio-2024-06-23-21_40_49.png) -->
 
 ![DiscoveryOptics](./Screnshoot/screencapture-discoveryoptics-mtechstudio-login-2024-06-24-20_55_42.png)
 

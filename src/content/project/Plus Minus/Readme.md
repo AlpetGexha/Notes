@@ -1,10 +1,10 @@
 ---
-img: '/Screnshoot/Screenshot%202024-06-25%20013211.png'
+img: '/Screnshoot/Screenshot-2024-06-25-013118.png'
 sort: 2
 ---
 # Plus Minus Game
 
-![image](./Screnshoot/Screenshot%202024-06-25%20013211.png)
+![image](./Screnshoot/Screenshot-2024-06-25-013118.png)
 
 ### Short Descroption
 
@@ -23,6 +23,6 @@ sort: 2
 
 ### Image of the App
 
-![image](./Screnshoot/Screenshot%202024-06-25%20013211.png)
+![image](./Screnshoot/Screenshot-2024-06-25-013118.png)
 
-![image](./Screnshoot/Screenshot%202024-06-25%20013118.png)
+![image](./Screnshoot/Screenshot-2024-06-25-013211.png)
