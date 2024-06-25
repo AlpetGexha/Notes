@@ -1,5 +1,5 @@
-import {defineCollection, reference, z} from 'astro:content';
-import {POST_METADATA} from "@/consts.ts";
+import { defineCollection, reference, z } from 'astro:content';
+import { POST_METADATA } from "@/consts.ts";
 
 const authors = defineCollection({
   type: 'content',
@@ -19,7 +19,7 @@ const authors = defineCollection({
 
 const blog = defineCollection({
   type: 'content',
-  schema: ({image}) => z.object({
+  schema: ({ image }) => z.object({
     title: z.string(),
     cover: image().optional(),
     date: z.coerce.date(),
@@ -47,4 +47,15 @@ const tags = defineCollection({
   }),
 });
 
-export const collections = {blog, authors, tags};
+const project = defineCollection({
+  type: 'content',
+  schema: z.object({
+    id: z.string().optional(),
+    title: z.string().optional(),
+    img: z.string().optional(),
+    sort: z.number().optional(),
+    // description: z.string(),
+  }),
+});
+
+export const collections = { blog, authors, tags, project };

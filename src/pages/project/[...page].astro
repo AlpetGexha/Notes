@@ -1,0 +1,38 @@
+---
+import { getCollection } from "astro:content";
+import ListLayout from "@/layouts/ProjectLayout.astro";
+import { PROJECT_PER_PAGE } from "@/consts";
+import { sortProjects } from "@/functions";
+// import ListWithTagsLayout from "@/layouts/ListWithTagsLayout.astro";
+import type { Page } from "astro";
+import { useTranslations } from "@/i18n";
+
+const t = useTranslations();
+
+interface Props {
+  page: Page;
+}
+
+export async function getStaticPaths({ paginate }) {
+  const posts = await getCollection("project").then(sortProjects);
+  return paginate(posts, { pageSize: PROJECT_PER_PAGE });
+}
+
+const { page } = Astro.props;
+let titleTemplate = "Projects";
+let robots;
+
+if (page.currentPage > 1) {
+  titleTemplate = t("seo.pagination.page", { page: `${page.currentPage}` });
+  // Ask search engines to not index paginated pages
+  robots = "noindex, follow";
+}
+---
+
+<ListLayout
+  title={t("pages.blog.title")}
+  description={t("pages.blog.description")}
+  page={page}
+  {robots}
+  {titleTemplate}
+/>

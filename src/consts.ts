@@ -5,8 +5,8 @@
  */
 export const SITE_METADATA = {
   theme: "system", // Options: system, light, dark
-  siteUrl: "https://tasb.yon.fun/",
-  siteRepo: "https://github.com/wanoo21/tailwind-astro-starting-blog",
+  siteUrl: "https://alpet-blog.netlify.app/",
+  siteRepo: "https://github.com/AlpetGexha/Notes",
   robots: "index, follow", // Options: index, noindex, follow, nofollow
 
   // These are not supported yet
@@ -18,12 +18,12 @@ export const SITE_METADATA = {
     googleAnalyticsId: null, // Add your Google Analytics id here
     metricalApp: null, // Add your Metrical app here
     plausible: {
-      domain: "", // Add your domain here
+      domain: "https://github.com/AlpetGexha/Notes", // Add your domain here
       src: "https://plausible.io/js/plausible.js",
     },
-    simpleAnalytics: false, // Activate Simple Analytics
+    simpleAnalytics: true, // Activate Simple Analytics
     umami: {
-      site: "", // Add your site id here
+      site: "https://github.com/AlpetGexha/Notes", // Add your site id here
       dataId: "", // Add your data id here
       host: "/umami.js", // Add your host here
     },
@@ -90,6 +90,7 @@ export const SITE_METADATA = {
  */
 export const ITEMS_PER_PAGE = 5;
 
+export const PROJECT_PER_PAGE = 10;
 
 /**
  * Navigation items.
@@ -102,7 +103,7 @@ export const NAVIGATION = [
   { href: "/", title: "nav.home" },
   { href: "/blog", title: "nav.blog" },
   { href: "/tags", title: "nav.tags" },
-  { href: "/projects", title: "nav.projects" },
+  { href: "/project", title: "nav.projects" },
   { href: "/about", title: "nav.about" },
 ] as const;
 

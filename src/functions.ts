@@ -1,4 +1,4 @@
-import type {CollectionEntry} from "astro:content";
+import type { CollectionEntry } from "astro:content";
 
 /**
  * Filter blog posts by published date and order them.
@@ -17,13 +17,20 @@ export const sortBlogPosts = (posts: CollectionEntry<'blog'>[] | null): Collecti
     })
 }
 
+export const sortProjects = (projects: CollectionEntry<'project'>[] | null): CollectionEntry<'project'>[] => {
+    if (!projects) return [];
+    return projects.sort((a, b) => {
+        return b.data.sort - a.data.sort
+    });
+}
+
 /**
  * Exclude draft posts from the collection. If the site is built in production mode, draft posts are excluded by default.
  *
  * @param post Blog post
  * @returns True if the post is not a draft
  */
-export const excludeDrafts = ({data}: CollectionEntry<'blog'>): boolean => {
+export const excludeDrafts = ({ data }: CollectionEntry<'blog'>): boolean => {
     // Usually this should be like this - import.meta.env.PROD ? !data.draft : true; but for the purpose of the demo, we are displaying drafts as well
     return import.meta.env.PROD ? true : true;
 }
