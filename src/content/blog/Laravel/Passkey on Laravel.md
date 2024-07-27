@@ -3,9 +3,10 @@ title: Passkey Authentication in Laravel
 date: 2024-07-28
 postLayout: simple
 draft: false
-summary: Implementing passkey authentication in Laravel can significantly bolster your application's security while simplifying
-the login process for users. In this detailed guide, we'll walk you through the setup and integration of passkey
-authentication in a Laravel project, ensuring you have all the tools and knowledge needed to succeed.
+summary: | 
+    Implementing passkey authentication in Laravel can significantly bolster your application's security while simplifying
+    the login process for users. In this detailed guide, we'll walk you through the setup and integration of passkey
+    authentication in a Laravel project, ensuring you have all the tools and knowledge needed to succeed.
 tags: [laravel]
 ---
 
@@ -37,7 +38,9 @@ The database structure is as follows:
 This structure is sufficient for working with passkeys.
 
 #### Creating the Model and Migration
+
 Run the following command to create the Passkey model and migration file:
+
 ```bash
 php artisan make:model Passkey -mf
 ```
@@ -54,7 +57,9 @@ Schema::create('passkeys', function (Blueprint $table) {
     $table->timestamps();
 });
 ```
+
 #### Defining Fillable and Casts in the Passkey Model
+
 In the Passkey model, add the following:
 
 ```php
@@ -88,7 +93,6 @@ public function data(): Attribute
 
 Passkeys are part of WebAuthn, a standard for secure passwordless authentication on the web.
 
-
 So for example the usb auth key we put on computer to verify our identity is a webauthn. So the web need to know what
 operations we what we want to support
 
@@ -113,6 +117,7 @@ on the `boostrap/app.php` add the following line
     $middleware->statefulApi();
 })
 ```
+
 #### Creating the Controller for Credential Creation
 
 After the installation lets create the API for Credential Creation Opstion for the FrontEnd
