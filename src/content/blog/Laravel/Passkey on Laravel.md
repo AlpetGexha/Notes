@@ -1,6 +1,6 @@
 ---
 title: Passkey Authentication in Laravel
-date: 2024-07-29
+date: 2024-07-28
 postLayout: simple
 draft: false
 summary: Implementing passkey authentication in Laravel can significantly bolster your application's security while simplifying
