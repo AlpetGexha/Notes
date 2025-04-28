@@ -50,7 +50,7 @@ COPY db.json /home/server/db.json
 
 json-server use port _3000_ to run we can do that by using `Expose` command
 
-```dokcer
+```docker
 EXPOSE 3000
 ```
 
