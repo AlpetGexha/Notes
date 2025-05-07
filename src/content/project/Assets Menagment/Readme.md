@@ -3,6 +3,7 @@ title: Assets Management
 img: '/Screenshot/screencapture-127-0-0-1-8000-admin-2024-06-24-04_48_07.png'
 sort: 19
 ---
+
 # Assets Management
 
 Asset Management it's any process a company or organization uses to keep track of the equipment and inventory vital to the day-to-day operation of their business.
