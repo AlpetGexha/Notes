@@ -46,7 +46,7 @@ const hasDefaultSlot = Astro.slots.has("default");
              <Card
               title={d.data.title ?? d.id.replace("/Readme.md", "")}
               description={d.description ?? ""}
-              imgSrc={d.data.img ? `/content/project/${d.id.replace("/Readme.md", "")}/${d.data.img}` : "https://placeholder.com/500x190"}
+              imgSrc={d.data.img ? `/src/content/project/${d.id.replace("/Readme.md", "")}/${d.data.img}` : "https://placeholder.com/500x190"}
               href={`/project/${d.slug}`}
             />
           ))
