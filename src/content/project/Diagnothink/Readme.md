@@ -1,7 +1,8 @@
 ---
-title: Digital Café 
-img: 'screenshots/DiagNoThink.png'
+title: DiagNoThink
+img: '/screenshots/DiagNoThink.png'
 sort: 16
+# screenshots/DiagNoThink.png
 ---
 
 # Diagnothink Healthcare AI Assistant
