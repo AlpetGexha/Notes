@@ -7,15 +7,15 @@ sort: 16
 
 # Diagnothink Healthcare AI Assistant
 
-![Diagnothink Logo](screenshots/DiagNoThink.png)
+![Diagnothink Logo](/screenshots/DiagNoThink.png)
 
 ## Overview
 
 Diagnothink is an intelligent healthcare assistant platform built with Laravel (backend) and React (frontend). It leverages AI to provide personalized healthcare guidance, advice, and information to users in a conversational interface. The platform focuses on delivering accurate, well-structured healthcare information with appropriate urgency indicators and product recommendations when relevant.
 
-![Diagnothink](screenshots/page.png)
+![Diagnothink](/screenshots/page.png)
 
-![Diagnothink](screenshots/chat.png)
+![Diagnothink](/screenshots/chat.png)
 
 ## Features
 
