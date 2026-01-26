@@ -1,104 +1,184 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import RootLayout from "@/layouts/RootLayout.astro";
 import Link from "@/components/Link.astro";
 import Tag from "@/components/Tag.astro";
 import FormattedDate from "@/components/FormattedDate.astro";
-import { excludeDrafts, sortBlogPosts } from "@/functions";
 import { useTranslations } from "@/i18n";
 
 const t = useTranslations();
 
-const prompts = await getCollection("prompts", excludeDrafts).then(sortBlogPosts);
+const allPrompts = await getCollection("prompts");
+const prompts = allPrompts
+  .filter((prompt) => !prompt.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-// Group prompts by category
-const promptsByCategory = prompts.reduce((acc, prompt) => {
-  const category = prompt.data.category || 'uncategorized';
-  if (!acc[category]) acc[category] = [];
-  acc[category].push(prompt);
-  return acc;
-}, {} as Record<string, typeof prompts>);
+const allTags = await getCollection("tags");
+
+// Get only tags that are used by prompts
+const promptTagSlugs = new Set(
+  prompts.flatMap((prompt) => prompt.data.tags.map(tag => String(tag)))
+);
+const tags = allTags.filter(tag => promptTagSlugs.has(tag.slug));
+
+// Get unique categories from prompts
+const categories = [...new Set(prompts.map(p => p.data.category || 'uncategorized'))].sort();
+
+// Count prompts per tag
+function tagCount(slug: CollectionEntry<"tags">["slug"]) {
+  return prompts.filter((prompt) => prompt.data.tags.includes(slug as any)).length;
+}
+
+// Count prompts per category
+function categoryCount(category: string) {
+  return prompts.filter((prompt) => (prompt.data.category || 'uncategorized') === category).length;
+}
+
+function isSamePath(path: string) {
+  return Astro.url.pathname === path;
+}
+
+const isPromptsPage = true;
 ---
 
 <RootLayout
   title="AI Prompts Collection"
   description="A curated collection of AI prompts for various tasks including development, writing, and analysis"
 >
-  <div class="divide-y divide-gray-200 dark:divide-gray-700">
-    <div class="space-y-2 pb-8 pt-6 md:space-y-5">
+  <div>
+    <div class="pb-6 pt-6">
       <h1
         class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14"
       >
         AI Prompts
       </h1>
-      <p class="text-lg leading-7 text-gray-500 dark:text-gray-400">
+      <p class="prose dark:prose-invert py-4 text-lg leading-7 text-gray-500 dark:text-gray-400">
         A collection of carefully crafted AI prompts for different use cases. Each prompt includes version history to track improvements over time.
       </p>
     </div>
 
-    {!prompts.length && (
-      <p class="py-12 text-center text-gray-500 dark:text-gray-400">
-        No prompts found. Check back later!
-      </p>
-    )}
+    <div class="flex sm:space-x-24">
+      <!-- Left Sidebar: Categories & Tags -->
+      <div
+        class="hidden max-h-screen h-full sm:flex flex-col bg-gray-50 dark:bg-gray-900/70 shadow-md pt-5 dark:shadow-gray-800/40 rounded min-w-[280px] max-w-[280px] overflow-auto"
+      >
+        <div class="py-4 px-6">
+          {isPromptsPage ? (
+            <h3 class="text-primary-500 font-bold uppercase">All Prompts</h3>
+          ) : (
+            <Link
+              href="/prompts"
+              class="font-bold uppercase text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-500"
+            >
+              All Prompts
+            </Link>
+          )}
 
-    {Object.entries(promptsByCategory).map(([category, categoryPrompts]) => (
-      <div class="py-8">
-        <h2 class="mb-6 text-2xl font-bold capitalize text-gray-900 dark:text-gray-100">
-          {category}
-        </h2>
-        <ul class="space-y-8">
-          {categoryPrompts.map((prompt) => {
-            const { title, description, tags, date, versions } = prompt.data;
+          {/* Categories Section */}
+          <div class="mt-6">
+            <h4 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">
+              Categories
+            </h4>
+            <ul>
+              {categories.map((category) => (
+                <li class="my-3">
+                  <Link
+                    href={`/prompts/category/${category}`}
+                    class="py-2 px-3 text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-500 capitalize"
+                    aria-label={`View ${category} prompts`}
+                  >
+                    {category} ({categoryCount(category)})
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Tags Section */}
+          <div class="mt-6">
+            <h4 class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400 mb-3">
+              Tags
+            </h4>
+            <ul>
+              {tags.map(({ slug, data }) => (
+                <li class="my-3">
+                  <Link
+                    href={`/tags/${slug}`}
+                    class="py-2 px-3 uppercase text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-500"
+                    aria-label={`View prompts tagged ${data.name}`}
+                  >
+                    {data.name} ({tagCount(slug)})
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Content: Prompts Grid */}
+      <div class="flex-1">
+        {!prompts.length && (
+          <p class="py-12 text-center text-gray-500 dark:text-gray-400">
+            No prompts found. Check back later!
+          </p>
+        )}
+
+        {/* 3-Column Responsive Grid */}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {prompts.map((prompt) => {
+            const { title, description, tags, date, category, versions } = prompt.data;
             const latestVersion = versions && versions.length > 0 
               ? versions[versions.length - 1].version 
               : null;
             
             return (
-              <li>
-                <article class="space-y-2">
-                  <div class="space-y-3">
-                    <div class="flex items-start justify-between">
-                      <h3 class="text-xl font-bold leading-8 tracking-tight">
-                        <Link
-                          href={`/prompts/${prompt.slug}`}
-                          class="text-gray-900 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-400"
-                        >
-                          {title}
-                        </Link>
-                      </h3>
-                      {latestVersion && (
-                        <span class="ml-4 inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-200">
-                          v{latestVersion}
-                        </span>
-                      )}
-                    </div>
-                    
-                    <div class="flex flex-wrap gap-2">
-                      {tags.map(({ slug }) => (
-                        <Tag slug={slug} />
-                      ))}
-                    </div>
+              <article class="flex flex-col rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex items-start justify-between mb-3">
+                  <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-200 capitalize">
+                    {category || 'uncategorized'}
+                  </span>
+                  {latestVersion && (
+                    <span class="inline-flex items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+                      v{latestVersion}
+                    </span>
+                  )}
+                </div>
 
-                    {description && (
-                      <p class="prose max-w-none text-gray-500 dark:text-gray-400">
-                        {description}
-                      </p>
-                    )}
+                <h3 class="text-lg font-bold leading-tight mb-3">
+                  <Link
+                    href={`/prompts/${prompt.slug}`}
+                    class="text-gray-900 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-400"
+                  >
+                    {title}
+                  </Link>
+                </h3>
 
-                    <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                      <FormattedDate date={date} />
-                      {versions && versions.length > 1 && (
-                        <span>• {versions.length} versions</span>
-                      )}
-                    </div>
+                {description && (
+                  <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-3 flex-grow">
+                    {description}
+                  </p>
+                )}
+
+                <div class="mt-auto">
+                  <div class="flex flex-wrap gap-1.5 mb-3">
+                    {tags.map((tag) => (
+                      <Tag slug={tag} />
+                    ))}
                   </div>
-                </article>
-              </li>
+
+                  <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 pt-3 border-t border-gray-100 dark:border-gray-700">
+                    <FormattedDate date={date} />
+                    {versions && versions.length > 1 && (
+                      <span>{versions.length} versions</span>
+                    )}
+                  </div>
+                </div>
+              </article>
             );
           })}
-        </ul>
+        </div>
       </div>
-    ))}
+    </div>
   </div>
 </RootLayout>

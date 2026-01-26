@@ -4,14 +4,23 @@ import { type CollectionEntry, getEntry } from "astro:content";
 
 interface Props {
   tag?: CollectionEntry<"tags">;
-  slug?: CollectionEntry<"tags">["slug"];
+  slug?: string | any; // Accept any to handle ReferenceDataEntry
 }
+
 let TagProp = Astro.props.tag;
 
 if (!TagProp && Astro.props.slug) {
-  TagProp = await getEntry("tags", Astro.props.slug);
+  // Convert slug to string - it might be a ReferenceDataEntry or direct string
+  const slugValue = String(Astro.props.slug);
+  TagProp = await getEntry("tags", slugValue);
 }
-const { slug, data } = TagProp!;
+
+if (!TagProp) {
+  console.warn('Tag component: No tag data provided', Astro.props);
+  return null;
+}
+
+const { slug, data } = TagProp;
 ---
 
 <Link

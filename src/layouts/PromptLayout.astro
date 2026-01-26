@@ -78,8 +78,8 @@ const { title, description, tags, date, lastmod, category, versions } = prompt.d
 
             <!-- Tags -->
             <div class="flex flex-wrap gap-2">
-              {tags.map(({ slug }) => (
-                <Tag slug={slug} />
+              {tags.map((tag) => (
+                <Tag slug={tag} />
               ))}
             </div>
           </div>
