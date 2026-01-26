@@ -12,5 +12,7 @@ import robotsTxt from "astro-robots-txt";
 export default defineConfig({
   prefetch: true,
   site: SITE_METADATA.siteUrl,
-  integrations: [mdx(), sitemap(), tailwind(), solidJs(), metaTags(), robotsTxt()]
+  integrations: [mdx(), sitemap(), tailwind(), solidJs({
+    devtools: true // Enable Solid DevTools in development
+  }), metaTags(), robotsTxt()]
 });
