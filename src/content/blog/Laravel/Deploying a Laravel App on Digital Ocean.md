@@ -16,7 +16,7 @@ So you've built an amazing Laravel application and now it's time to deploy it on
 Begin by cloning your Laravel project into your desired directory. Let's assume you want it in `/etc/www/`.
 
 ```bash
-git clone https://<TOKEN>@github.com/<USERNAME>/<REPO>.git /etc/www/
+git clone https://YOUR_GITHUB_TOKEN@github.com/<USERNAME>/<REPO>.git /etc/www/
 ```
 
 Navigate into the repository and sync the files to your server:
@@ -104,7 +104,7 @@ php artisan icons:cache
 And that's it! Your Laravel application should now be up and running on DigitalOcean. Don't forget to configure your Nginx server block to point to your Laravel application's public directory. Happy coding!
 
 ```bash
-git clone https:/<TOKEN>@github.com/AlpetGexha/dueDate.git /var/www/dueDate
+git clone https://YOUR_GITHUB_TOKEN@github.com/AlpetGexha/dueDate.git /var/www/dueDate
 rsync -avzh /var/www/dueDate/ /var/www/laravel
 
 sudo apt-get update
@@ -203,6 +203,8 @@ redirect_stderr=true
 stdout_logfile=/var/www/laravel/storage/logs/worker.log
 ```
 
+<<<<<<< HEAD
+=======
 This Supervisor configuration sets up 4 instances of a Laravel queue worker, ensures they are automatically started and restarted if they fail, runs them as the root user, and logs their output to a specified log file.
 
 - **process_name**: The name of the process. (This sets the naming pattern for the processes. %(program_name)s is a placeholder for the program name (queue-worker), and %(process_num)02d is a placeholder for the process number, formatted as a two-digit number (e.g., 00, 01, 02, etc.). So, the process names will be queue-worker_00, queue-worker_01, and so on.)
@@ -222,6 +224,7 @@ This Supervisor configuration sets up 4 instances of a Laravel queue worker, ens
 - **stdout_logfile**: The path to the log file for the process. (In this case, it is /var/www/laravel/storage/logs/worker.log.)
 
 
+>>>>>>> d7f5c82fb1cb05bac9cd26289712308dcdad00a1
 Also dont forget to restart the supervisor if you have made any changes
 
 ```bash
