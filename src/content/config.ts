@@ -58,4 +58,23 @@ const project = defineCollection({
   }),
 });
 
-export const collections = { blog, authors, tags, project };
+const prompts = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    tags: z.array(reference('tags')).default(['default']),
+    date: z.coerce.date(),
+    lastmod: z.coerce.date().optional(),
+    draft: z.boolean().default(false),
+    category: z.string().optional(), // e.g., "development", "writing", "analysis"
+    // Version history to track changes
+    versions: z.array(z.object({
+      version: z.string(), // e.g., "1.0", "1.1", "2.0"
+      date: z.coerce.date(),
+      changes: z.string(), // Description of what changed
+    })).optional(),
+  }),
+});
+
+export const collections = { blog, authors, tags, project, prompts };

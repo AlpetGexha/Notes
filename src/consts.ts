@@ -103,6 +103,7 @@ export const NAVIGATION = [
   { href: "/", title: "nav.home" },
   { href: "/blog", title: "nav.blog" },
   { href: "/tags", title: "nav.tags" },
+  { href: "/prompts", title: "nav.prompts" },
   { href: "/project", title: "nav.projects" },
   { href: "/about", title: "nav.about" },
 ] as const;

@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import { excludeDrafts } from "@/functions";
+import PromptLayout from "@/layouts/PromptLayout.astro";
+
+export async function getStaticPaths() {
+  const prompts = await getCollection('prompts', excludeDrafts);
+  if (!prompts) return [];
+  return prompts.map((prompt) => ({
+    params: { slug: prompt.slug },
+    props: { prompt },
+  }));
+}
+
+const { prompt } = Astro.props;
+const { Content } = await prompt.render();
+---
+
+<PromptLayout prompt={prompt}>
+  <Content />
+</PromptLayout>

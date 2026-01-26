@@ -1,0 +1,104 @@
+---
+import { getCollection } from "astro:content";
+import RootLayout from "@/layouts/RootLayout.astro";
+import Link from "@/components/Link.astro";
+import Tag from "@/components/Tag.astro";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { excludeDrafts, sortBlogPosts } from "@/functions";
+import { useTranslations } from "@/i18n";
+
+const t = useTranslations();
+
+const prompts = await getCollection("prompts", excludeDrafts).then(sortBlogPosts);
+
+// Group prompts by category
+const promptsByCategory = prompts.reduce((acc, prompt) => {
+  const category = prompt.data.category || 'uncategorized';
+  if (!acc[category]) acc[category] = [];
+  acc[category].push(prompt);
+  return acc;
+}, {} as Record<string, typeof prompts>);
+---
+
+<RootLayout
+  title="AI Prompts Collection"
+  description="A curated collection of AI prompts for various tasks including development, writing, and analysis"
+>
+  <div class="divide-y divide-gray-200 dark:divide-gray-700">
+    <div class="space-y-2 pb-8 pt-6 md:space-y-5">
+      <h1
+        class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-6xl md:leading-14"
+      >
+        AI Prompts
+      </h1>
+      <p class="text-lg leading-7 text-gray-500 dark:text-gray-400">
+        A collection of carefully crafted AI prompts for different use cases. Each prompt includes version history to track improvements over time.
+      </p>
+    </div>
+
+    {!prompts.length && (
+      <p class="py-12 text-center text-gray-500 dark:text-gray-400">
+        No prompts found. Check back later!
+      </p>
+    )}
+
+    {Object.entries(promptsByCategory).map(([category, categoryPrompts]) => (
+      <div class="py-8">
+        <h2 class="mb-6 text-2xl font-bold capitalize text-gray-900 dark:text-gray-100">
+          {category}
+        </h2>
+        <ul class="space-y-8">
+          {categoryPrompts.map((prompt) => {
+            const { title, description, tags, date, versions } = prompt.data;
+            const latestVersion = versions && versions.length > 0 
+              ? versions[versions.length - 1].version 
+              : null;
+            
+            return (
+              <li>
+                <article class="space-y-2">
+                  <div class="space-y-3">
+                    <div class="flex items-start justify-between">
+                      <h3 class="text-xl font-bold leading-8 tracking-tight">
+                        <Link
+                          href={`/prompts/${prompt.slug}`}
+                          class="text-gray-900 dark:text-gray-100 hover:text-primary-500 dark:hover:text-primary-400"
+                        >
+                          {title}
+                        </Link>
+                      </h3>
+                      {latestVersion && (
+                        <span class="ml-4 inline-flex items-center rounded-full bg-primary-100 px-3 py-1 text-xs font-medium text-primary-800 dark:bg-primary-900 dark:text-primary-200">
+                          v{latestVersion}
+                        </span>
+                      )}
+                    </div>
+                    
+                    <div class="flex flex-wrap gap-2">
+                      {tags.map(({ slug }) => (
+                        <Tag slug={slug} />
+                      ))}
+                    </div>
+
+                    {description && (
+                      <p class="prose max-w-none text-gray-500 dark:text-gray-400">
+                        {description}
+                      </p>
+                    )}
+
+                    <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                      <FormattedDate date={date} />
+                      {versions && versions.length > 1 && (
+                        <span>• {versions.length} versions</span>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    ))}
+  </div>
+</RootLayout>

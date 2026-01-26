@@ -25,6 +25,10 @@ export const ui = {
     'pages.projects.showcase': 'Showcase your projects',
     'pages.blog.title': 'Blog',
     'pages.blog.description': 'All blog posts',
+    'pages.prompts.title': 'AI Prompts',
+    'pages.prompts.description': 'Collection of AI prompts for various tasks',
+    'pages.prompts.noPrompts': 'No prompts found',
+    'pages.prompts.viewAll': 'View all prompts',
     'pages.404.title': '404 - Not Found',
     'pages.404.description': 'The page you are looking for does not exist.',
     'pages.404.backToHome': 'Back to home',
@@ -43,6 +47,7 @@ export const ui = {
     // Navigation
     'nav.home': 'Home',
     'nav.blog': 'Blog',
+    'nav.prompts': 'Prompts',
     'nav.projects': 'Projects',
     'nav.tags': 'Tags',
     'nav.about': 'About',
